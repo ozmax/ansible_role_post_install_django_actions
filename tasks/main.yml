@@ -1,0 +1,20 @@
+- name: Django models are migrated.
+  become_user: "{{ unix_user }}"
+  django_manage:
+    command: migrate
+    app_path: "{{ deployment_path }}"
+    virtualenv: "{{ virtualenv }}"
+
+- name: Frontend built files are copied to remote server.
+  copy:
+    src: "{{ playbook_dir }}/../{{ project_name }}/static/{{ project_name }}/dist/"
+    dest: "{{ deployment_path }}{{ project_name }}/static/{{ project_name }}/dist/"
+    owner: "{{ unix_user }}"
+    group: "{{ unix_user }}"
+
+- name: Django collectstatic is ran.
+  become_user: '{{ unix_user }}'
+  django_manage:
+    command: collectstatic
+    app_path: "{{ deployment_path }}"
+    virtualenv: "{{ virtualenv }}"
