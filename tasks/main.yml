@@ -11,6 +11,7 @@
     dest: "{{ deployment_path }}{{ project_name }}/static/{{ project_name }}/dist/"
     owner: "{{ unix_user }}"
     group: "{{ unix_user }}"
+  when: copy_frontend_files
 
 - name: Django collectstatic is ran.
   become_user: '{{ unix_user }}'
